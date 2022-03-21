@@ -12,18 +12,24 @@ void main(List<String> arguments) {
   Reponse  r2= Reponse("1832",false);
   Reponse r3= Reponse("1998",false);
   List<Reponse> reso=[];
+  List<Reponse> reso2=[];
+
   reso.add(r1);
   reso.add(r2);
   reso.add(r3);
+  reso2.addAll(reso);
   Question question =Question("Questio1", "quel est votre age", 10, reso);
+  Question question2 =Question("Questio2", "quel est votre age de votre pere", 10, reso);
+
   List<Question> Q=[];
   Q.add(question);
+  Q.add(question2);
   Questionnaire questionnaire=Questionnaire("JAVA", Q);
   var line = stdin.readLineSync();
 
   for(var i=0;i<questionnaire.questions.length;i++){
     print(questionnaire.questions[i]);
-    print("saisire la bon reponse");
+    print(" saisire la bon reponse");
     line = stdin.readLineSync();
     for(var j=0;j<3;j++){
       if(line==questionnaire.questions[i].answers[j].title&&questionnaire.questions[i].answers[j].isCorrect==true){

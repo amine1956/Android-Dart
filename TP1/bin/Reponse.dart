@@ -7,7 +7,6 @@ class Reponse{
 
   @override
   String toString() {
-    return '\n'
-           '$title';
+    return '\n $title';
   }
 }
