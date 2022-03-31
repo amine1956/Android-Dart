@@ -1,6 +1,6 @@
 class Reponse{
-  late String title;
-  late bool isCorrect;
+   String title;
+   bool isCorrect;
 
 
   Reponse(this.title, this.isCorrect);

@@ -1,8 +1,8 @@
 import 'Question.dart';
 
 class Questionnaire {
-  late String title;
-  late List<Question> questions;
+   String title;
+   List<Question> questions;
 
   Questionnaire(this.title, this.questions);
 

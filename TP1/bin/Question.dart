@@ -1,9 +1,9 @@
 import 'Reponse.dart';
 
 class Question {
-late String title;
-late String description;
-late num score;
+ String title;
+ String description;
+ num score;
 List<Reponse> answers;
 
 
