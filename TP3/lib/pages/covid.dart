@@ -8,7 +8,14 @@ class covid extends StatefulWidget {
   @override
   State<covid> createState() => _GitHubUsersState();
 }
-
+Widget titleWidget(title, subtitle, color) {
+  return ListTile(
+    title: Text(title,
+        style: TextStyle(
+            color: color, fontSize: 17, fontWeight: FontWeight.w500)),
+    trailing: Text(subtitle, style: TextStyle(color: color, fontSize: 14)),
+  );
+}
 class _GitHubUsersState extends State<covid> {
   var users=null;
   TextEditingController textEditingController=new TextEditingController();
@@ -20,8 +27,9 @@ class _GitHubUsersState extends State<covid> {
       trailing: Text(subtitle, style: TextStyle(color: color, fontSize: 14)),
     );
   }
-   void searchGithubUser(){
-    String url="https://api.covid19api.com/summary";
+   void searchGithubUser(paye){
+    String url="https://covid-api.mmediagroup.fr/v1/cases?country=${paye}";
+    print(url);
     http.get(Uri.parse(url))
         .then((response) {
       setState(() {
@@ -35,45 +43,101 @@ class _GitHubUsersState extends State<covid> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Covid"),
+        title: Text("Covide "),
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Row(
-              children: [
+            Row(children: [
+                Expanded(child: TextFormField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      )
+                  ),
+                )),
                 IconButton(
                   onPressed: () {
                     setState(() {
-                      searchGithubUser();
+                      searchGithubUser(textEditingController.text);
                     });
                   },
                   icon: Icon(Icons.search),
                 )
-
               ],
             ),
             Expanded(
               child: ListView.builder(
-
-                itemCount:users==null||users["Countries"]==null?0: users["Countries"].length,
+ padding: EdgeInsets.all(10),
+                itemCount:users==null||users["All"]==null?0: 1,
                 itemBuilder: (context, index) {
                   return Card(
+
                       elevation: 100,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(2),
+                              topRight: Radius.circular(2))),
+                      //side: BorderSide( color: Colors.black)),
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.info_outline,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("${textEditingController.text} Corona Cases",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              ],
+                            ),
+                            Divider(),
+                            Row(
+                              children: <Widget>[
+                                //Icon(Icons.timer, color: Colors.black),
+                                //  SizedBox(width: 2),
+                                Flexible(
+                                    child: ListTile(
+                                      title: Text(
+                                        "LastUpdated:",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      subtitle: Text(users["All"]["updated"].toString(),
+                                          style: TextStyle()),
+                                    ))
+                              ],
+                            ),
+                            titleWidget(
+                                'Confirmed',
+                                users["All"]["confirmed"].toString() ?? '',
+                                Colors.blue),
+                            titleWidget(
+                                'Recovered',
+                                users["All"]["recovered"].toString() ?? '',
+                                Colors.green),
+                            titleWidget(
+                                'Deaths',
+                                users["All"]["deaths"].toString() ?? '',
+                                Colors.red),
+                          ],
+                        ),
+                      ),
 
-                      child: ListTile(
-
-                    leading: CircleAvatar(
-                        child: Text(users["Countries"][index]["Country"].substring(0,2))
-                    ),
-                    title: Text("Confirmed  "+users["Countries"][index]["TotalConfirmed"].toString()),
-                    subtitle: Text("Deaths  "+users["Countries"][index]["TotalDeaths"].toString()),
-
-                  ));
+                  );
                 },),
             )
-
           ],
         ),
       ),

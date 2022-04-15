@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tp22/pages/ProfileUI2%20.dart';
 import 'package:tp22/pages/covid.dart';
 import 'package:tp22/pages/news.dart';
 import 'package:tp22/pages/contacts.dart';
 import 'package:tp22/pages/github_users.dart';
 import 'package:tp22/pages/home.dart';
+import 'package:tp22/providers/ListeNews.dart';
 
 void main(){
 runApp(MyApp());
@@ -12,7 +14,9 @@ runApp(MyApp());
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create:(context)=> listeVluseState())],
+      child:MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.green,
         textTheme: TextTheme(
@@ -28,7 +32,7 @@ class MyApp extends StatelessWidget{
         "/about":(context)=>ProfileUI2(),
 
       },
-
+      )
     );
   }
 

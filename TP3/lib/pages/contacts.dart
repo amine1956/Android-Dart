@@ -27,11 +27,11 @@ class _ContactsState extends State<Contacts> {
                 Expanded(
                   child: TextFormField(
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.contacts),
-                      hintText: "Entrez un nom",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)
-                      )
+                        prefixIcon: Icon(Icons.contacts),
+                        hintText: "Entrez un nom",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15)
+                        )
                     ),
                     controller: textController,
                   ),

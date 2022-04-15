@@ -58,12 +58,11 @@ class _GitHubUsersState extends State<GitHubUsers> {
             Expanded(
               child: ListView.builder(
 
-                itemCount:users==null||users["items"]==null?0: users["items"].length,
                 itemBuilder: (context, index) {
                   return Card(
                       elevation: 100,
 
-                      child: ListTile(                   leading: CircleAvatar(
+                      child: ListTile(leading: CircleAvatar(
                      backgroundImage: NetworkImage(users["items"][index]["avatar_url"]),
                    ),
                     title: Text(users["items"][index]["login"]),

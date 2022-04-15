@@ -3,30 +3,20 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:tp22/providers/ListeNews.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class news extends StatefulWidget {
-  @override
-  State<news> createState() => _GitHubUsersState();
-}
 
-class _GitHubUsersState extends State<news> {
-  var users=null;
+class news extends StatelessWidget {
   TextEditingController textEditingController=new TextEditingController();
   TextEditingController textEditingController1=new TextEditingController();
-
-  void searchNews(key,date){
-    String url= "https://newsapi.org/v2/everything?q={${key}}&from={${date}}&apiKey=3cf8c4eb320946bf9d88200dd85311b3";
-    http.get(Uri.parse(url))
-        .then((response) {
-      setState(() {
-        users= json.decode(response.body);
-        print(users);
-        print(url);
-      });
-    }).catchError((onError){
-      print(onError);
-    });
+  void _launchURL(String _url) async {
+print(_url);
+    if (!await launch(_url)) throw 'Could not launch $_url';
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,29 +52,36 @@ class _GitHubUsersState extends State<news> {
 
                 IconButton(
                   onPressed: () {
-                    setState(() {
-                      searchNews(textEditingController.text,textEditingController1.text);
-                    });
+
+                    Provider.of<listeVluseState>(context,listen: false).searchNews(textEditingController.text,textEditingController1.text);
+
                   },
                   icon: Icon(Icons.search),
                 )
               ],
             ),
             Expanded(
-              child: ListView.builder(
+              child: Consumer<listeVluseState>(
+     builder: (context,listeVluseState,child){
+       return ListView.builder(
 
-                itemCount:users==null||users["articles"]==null?0: users["articles"].length,
-                itemBuilder: (context, index) {
-                 return Card(
-                      elevation: 100,
+         itemCount:listeVluseState.users==null||listeVluseState.users["articles"]==null?0: listeVluseState.users["articles"].length,
+         itemBuilder: (context, index) {
+           return Card(
+               elevation: 100,
 
-                      child: ListTile(
-                   leading: CircleAvatar(
-                     backgroundImage: NetworkImage(users["articles"][index]["urlToImage"]),
-                   ),
-                    title: Text(users["articles"][index]["source"]["name"]),
-                ));
-              },),
+               child: ListTile(
+                   onTap: () => _launchURL(listeVluseState.users["articles"][index]["url"]),
+                 leading: CircleAvatar(
+
+                   backgroundImage: NetworkImage(listeVluseState.users["articles"][index]["urlToImage"]),
+
+                 ),
+                 title: Text(listeVluseState.users["articles"][index]["source"]["name"]),
+               ));
+         },);
+    }
+              ),
             )
           ],
         ),
