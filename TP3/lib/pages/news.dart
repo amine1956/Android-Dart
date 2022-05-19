@@ -7,15 +7,16 @@ import 'package:provider/provider.dart';
 import 'package:tp22/providers/ListeNews.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'InfoNews.dart';
 
 class news extends StatelessWidget {
-  TextEditingController textEditingController=new TextEditingController();
-  TextEditingController textEditingController1=new TextEditingController();
+  TextEditingController textEditingController = new TextEditingController();
+  TextEditingController textEditingController1 = new TextEditingController();
+
   void _launchURL(String _url) async {
-print(_url);
+    print(_url);
     if (!await launch(_url)) throw 'Could not launch $_url';
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,32 +30,29 @@ print(_url);
           children: [
             Row(
               children: [
-                Expanded(child: TextFormField(
+                Expanded(
+                    child: TextFormField(
                   controller: textEditingController,
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                      )
-                  ),
+                      )),
                 )),
-
-                Expanded(child: TextFormField(
+                Expanded(
+                    child: TextFormField(
                   controller: textEditingController1,
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                      )
-                  ),
+                      )),
                 )),
-
-
                 IconButton(
                   onPressed: () {
-
-                    Provider.of<listeVluseState>(context,listen: false).searchNews(textEditingController.text,textEditingController1.text);
-
+                    Provider.of<listeVluseState>(context, listen: false)
+                        .searchNews(textEditingController.text,
+                            textEditingController1.text);
                   },
                   icon: Icon(Icons.search),
                 )
@@ -62,26 +60,42 @@ print(_url);
             ),
             Expanded(
               child: Consumer<listeVluseState>(
-     builder: (context,listeVluseState,child){
-       return ListView.builder(
-
-         itemCount:listeVluseState.users==null||listeVluseState.users["articles"]==null?0: listeVluseState.users["articles"].length,
-         itemBuilder: (context, index) {
-           return Card(
-               elevation: 100,
-
-               child: ListTile(
-                   onTap: () => _launchURL(listeVluseState.users["articles"][index]["url"]),
-                 leading: CircleAvatar(
-
-                   backgroundImage: NetworkImage(listeVluseState.users["articles"][index]["urlToImage"]),
-
-                 ),
-                 title: Text(listeVluseState.users["articles"][index]["source"]["name"]),
-               ));
-         },);
-    }
-              ),
+                  builder: (context, listeVluseState, child) {
+                return ListView.builder(
+                  itemCount: listeVluseState.users == null ||
+                          listeVluseState.users["articles"] == null
+                      ? 0
+                      : listeVluseState.users["articles"].length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                        elevation: 100,
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WebViewNews(
+                                        listeVluseState.users["articles"][index]
+                                            ["url"],
+                                        listeVluseState.users["articles"][index]
+                                            ["urlToImage"],
+                                        listeVluseState.users["articles"][index]
+                                            ["title"],
+                                        listeVluseState.users["articles"][index]
+                                            ["description"],
+                                        listeVluseState.users["articles"][index]
+                                            ["author"])));
+                          },
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(listeVluseState
+                                .users["articles"][index]["urlToImage"]),
+                          ),
+                          title: Text(listeVluseState.users["articles"][index]
+                              ["source"]["name"]),
+                        ));
+                  },
+                );
+              }),
             )
           ],
         ),

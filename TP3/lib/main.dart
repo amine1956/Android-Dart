@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tp22/pages/InfoNews.dart';
 import 'package:tp22/pages/ProfileUI2%20.dart';
 import 'package:tp22/pages/covid.dart';
 import 'package:tp22/pages/news.dart';
